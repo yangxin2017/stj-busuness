@@ -82,6 +82,14 @@ public class ShiroConfig {
         filterChainDefinitionMap.put("/fh/**", "anon"); //
         filterChainDefinitionMap.put("/monitor/**", "anon"); //
 //        filterChainDefinitionMap.put("/sso/*", "anon"); // 可匿名访问
+
+        filterChainDefinitionMap.put("/login","anon");
+        filterChainDefinitionMap.put("/doc.html", "anon");
+        filterChainDefinitionMap.put("/swagger-resources/**", "anon");
+        filterChainDefinitionMap.put("/v2/api-docs", "anon");
+        filterChainDefinitionMap.put("/v2/api-docs-ext", "anon");
+        filterChainDefinitionMap.put("/webjars/**", "anon");
+
         filterChainDefinitionMap.put("/user/401", "noSessionCreation");
 //        filterChainDefinitionMap.put("/user/**", "anon"); // 需登录才能访问
         filterChainDefinitionMap.put("/**", "jwtFilter"); // 需登录才能访问
