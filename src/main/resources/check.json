@@ -1,0 +1,14 @@
+{
+  "CERs": [
+    { "name": "notnull" },
+    { "name": "range", "min": -1, "max": 9999999 }
+  ],
+  "standard_c_let": [
+    { "name": "notnull" },
+    { "name": "range", "min": -1, "max": 9999999 }
+  ],
+  "c_let": [
+    { "name": "notnull" },
+    { "name": "range", "min": -1, "max": 9999999 }
+  ]
+}
