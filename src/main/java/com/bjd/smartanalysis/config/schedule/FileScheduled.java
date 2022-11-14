@@ -12,6 +12,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 
 import javax.annotation.PostConstruct;
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -29,7 +30,7 @@ public class FileScheduled {
     private DataKeyService keyService;
 
     @Scheduled(fixedRate=10000)
-    private void configureTasks() {
+    private void configureTasks() throws IOException {
         List<CmFile> files = fileService.GetAllReadyFile();
         for(CmFile f: files) {
             System.out.println("开始插入数据：" + f.getFileName());

@@ -369,7 +369,7 @@ public class CheckDataController {
                                 // System.out.println(calcLeftValue + "=====" + calcRightVal + "=====" + cSend);
 
                                 // 判断数据是否有问题？
-                                if (Math.abs(calcRightVal - cSend) > 1.0) {
+                                if (Math.abs((calcRightVal - cSend)/calcRightVal )> 0.01) {
                                     DataFhErr fe = GetDataFhErr(yx, calcLeftValue, calcRightVal);
                                     fhErrs.add(fe);
                                 } else {

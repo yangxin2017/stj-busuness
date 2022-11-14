@@ -24,6 +24,7 @@ public class CmFileServiceImpl extends ServiceImpl<CmFileMapper, CmFile> impleme
     public PageData SelectPage(Integer typeId, Integer pageIndex, Integer pageSize) {
         IPage<CmFile> filePage = new Page<>(pageIndex, pageSize);
         QueryWrapper<CmFile> queryWrapper = new QueryWrapper<>();
+        queryWrapper.orderByDesc("data_time");
         queryWrapper.eq("type_id", typeId);
         queryWrapper.orderByDesc("ctime");
         filePage = mapper.selectPage(filePage, queryWrapper);
@@ -38,6 +39,7 @@ public class CmFileServiceImpl extends ServiceImpl<CmFileMapper, CmFile> impleme
     public PageData SelectPage(Integer typeId, String datasource, Integer pageIndex, Integer pageSize) {
         IPage<CmFile> filePage = new Page<>(pageIndex, pageSize);
         QueryWrapper<CmFile> queryWrapper = new QueryWrapper<>();
+        queryWrapper.orderByDesc("data_time");
         queryWrapper.eq("type_id", typeId);
         if (datasource != null && !datasource.equals("")) {
             queryWrapper.eq("data_source", datasource);
@@ -50,6 +52,23 @@ public class CmFileServiceImpl extends ServiceImpl<CmFileMapper, CmFile> impleme
         res.setTotal(filePage.getTotal());
         return res;
     }
+
+/*    @Override
+    public PageData SelectPage(Integer typeId, String datasource, Integer pageIndex, Integer pageSize , String OrderBy) {
+        IPage<CmFile> filePage = new Page<>(pageIndex, pageSize);
+        QueryWrapper<CmFile> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("type_id", typeId);
+        if (datasource != null && !datasource.equals("")) {
+            queryWrapper.eq("data_source", datasource);
+        }
+        queryWrapper.orderByDesc("ctime");
+        filePage = mapper.selectPage(filePage, queryWrapper);
+        PageData res = new PageData();
+        List<CmFile> datas = filePage.getRecords();
+        res.setData(datas);
+        res.setTotal(filePage.getTotal());
+        return res;
+    }*/
 
     @Override
     public List<CmFile> GetList(String dataSource, Integer typeId) {

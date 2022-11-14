@@ -54,7 +54,7 @@ public class TaskService {
 
 
     @Async
-    public void excutVoidTask(CmFile file) {
+    public void excutVoidTask(CmFile file) throws IOException {
         if (file != null) {
             if (file.getTypeId() == 1) {
 //                file.setDataStatus(CmFileService.ING);
@@ -258,7 +258,18 @@ public class TaskService {
         return ish;
     }
 
-    private void SaveCheckData(String filepath, Integer fileId) {
+    private void SaveCheckData(String filepath, Integer fileId) throws IOException {
+        BufferedInputStream bis = new BufferedInputStream(new FileInputStream(filepath));
+        int p = (bis.read()<<8) + bis.read();
+        bis.close();
+
+        String code = null;
+        if(p == 0xefbb) {
+            code = "utf-8";
+        } else {
+            code = "gb2312";
+        }
+
         JSONObject checkCondition = InitCheckCondition();
         CsvReader reader = CsvUtil.getReader();
 
@@ -268,7 +279,8 @@ public class TaskService {
             CsvRow dr = rows.get(1);
             String ds = dr.get(5);
             if (!ds.equals("百度") && !ds.equals("高德")) {
-                data = reader.read(FileUtil.file(filepath), Charset.forName("utf-8"));
+                // data = reader.read(FileUtil.file(filepath), Charset.forName("utf-8"));
+                data = reader.read(FileUtil.file(filepath), Charset.forName(code));
                 rows = data.getRows();
             }
         }
@@ -319,6 +331,14 @@ public class TaskService {
                 Object tripDuraion = GetValueByKey(obj,"行程时间", "travel_time");
                 Object tripLength = GetValueByKey(obj,"出行里程", "trip_distance");
                 Object tripCheckLength = GetValueByKey(obj,"核验出行里程", "verify_trip_distance");
+                if((tripType.equals("cycle")||tripType.equals("ecycle"))&&Double.parseDouble(tripCheckLength.toString())>210000) {
+                    tripCheckLength = "210000";
+                    System.out.println(tripCheckLength);
+                }
+                if(tripType.equals("walk")&&Double.parseDouble(tripCheckLength.toString())>90000){
+                    tripCheckLength = "90000";
+                    System.out.println(tripCheckLength);
+                }
                 Object cSend = GetValueByKey(obj,"碳减排量", "CERs");
                 Object cBaseSend = GetValueByKey(obj,"基准碳排放量", "standard_c_let");
                 Object cProjectSend = GetValueByKey(obj,"项目碳排放量", "c_let");
@@ -501,8 +521,15 @@ public class TaskService {
         }
 
         System.out.println("deal ok ====, start insert....");
-        checkYxService.InsertBatch(listsYx);
-        checkErrService.saveBatch(listsErr, 500);
+        try{
+            checkYxService.InsertBatch(listsYx);
+            checkErrService.saveBatch(listsErr, 500);
+        } catch (Exception e) {
+            // 删除 文件记录
+            e.printStackTrace();
+        }
+
+
 
         // 更新文件字段
         CmFile f = fileService.getById(fileId);
@@ -515,7 +542,9 @@ public class TaskService {
         }
 
         System.out.println("保存任务列表----开始");
+        // 使用线程锁保证datasource的唯一性
         synchronized (fileId.toString().intern()) {
+            // synchronized (this) {
             Set<String> maps = checkMap.keySet();
             for (String k : maps) {
                 String[] arr = k.split("#");

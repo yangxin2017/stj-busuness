@@ -14,6 +14,7 @@ public interface CmFileService extends IService<CmFile> {
 
     public PageData SelectPage(Integer typeId, Integer pageIndex, Integer pageSize);
     public PageData SelectPage(Integer typeId, String datasource, Integer pageIndex, Integer pageSize);
+    /*public PageData SelectPage(Integer typeId, String datasource, Integer pageIndex, Integer pageSize , String OrderBy);*/
 
     public List<CmFile> GetList(String dataSource, Integer typeId);
 
