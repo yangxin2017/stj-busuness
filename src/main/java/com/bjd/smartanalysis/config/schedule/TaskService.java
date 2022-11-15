@@ -259,17 +259,6 @@ public class TaskService {
     }
 
     private void SaveCheckData(String filepath, Integer fileId) throws IOException {
-        BufferedInputStream bis = new BufferedInputStream(new FileInputStream(filepath));
-        int p = (bis.read()<<8) + bis.read();
-        bis.close();
-
-        String code = null;
-        if(p == 0xefbb) {
-            code = "utf-8";
-        } else {
-            code = "gb2312";
-        }
-
         JSONObject checkCondition = InitCheckCondition();
         CsvReader reader = CsvUtil.getReader();
 
@@ -279,9 +268,14 @@ public class TaskService {
             CsvRow dr = rows.get(1);
             String ds = dr.get(5);
             if (!ds.equals("百度") && !ds.equals("高德")) {
-                // data = reader.read(FileUtil.file(filepath), Charset.forName("utf-8"));
-                data = reader.read(FileUtil.file(filepath), Charset.forName(code));
+                data = reader.read(FileUtil.file(filepath), Charset.forName("utf-8"));
                 rows = data.getRows();
+                dr = rows.get(1);
+                ds = dr.get(5);
+                if (!ds.equals("百度") && !ds.equals("高德")) {
+                    data = reader.read(FileUtil.file(filepath), Charset.forName("gb2312"));
+                    rows = data.getRows();
+                }
             }
         }
 
