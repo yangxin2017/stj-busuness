@@ -81,6 +81,7 @@ public class ShiroConfig {
         filterChainDefinitionMap.put("/check/**", "anon"); //
         filterChainDefinitionMap.put("/fh/**", "anon"); //
         filterChainDefinitionMap.put("/monitor/**", "anon"); //
+        filterChainDefinitionMap.put("/jianpai/**", "anon"); //
 //        filterChainDefinitionMap.put("/sso/*", "anon"); // 可匿名访问
 
         filterChainDefinitionMap.put("/login","anon");

@@ -333,7 +333,7 @@ public class CheckDataController {
 
                         Double cSend = yx.getCSend();
                         String stimeStr = DateUtil.format(stime, "M/d");
-                        stimeStr = "2020/" + stimeStr;
+                        stimeStr = "2021/" + stimeStr;
                         PamCpf cpf = this.GetOneByTime(stimeStr, p1s);
                         if (cpf == null) {
                             isOK = false;
@@ -366,7 +366,11 @@ public class CheckDataController {
                                 Double jpVal = GetObjectByFieldName(pamJP, fieldName);
                                 Double calcLeftValue = jpVal * checkLength;
 
-                                // System.out.println(calcLeftValue + "=====" + calcRightVal + "=====" + cSend);
+                                System.out.println("val====" + val + ",tripType:::" + tripType + ",tripTypeVal:::" +
+                                        GetValTransfer(tripType, transfer) + ",checkLength:::" + checkLength +
+                                        ",projectVal:::" + GetValProject(tripType, project) +
+                                        ",fieldName:::" + stimeStr + " " +fieldName +
+                                        ",calcRightVal:::" + calcRightVal + ",jpVal:::" + jpVal + ",calcLeftValue:::" + calcLeftValue);
 
                                 // 判断数据是否有问题？
                                 if (Math.abs((calcRightVal - cSend)/calcRightVal )> 0.01) {
