@@ -34,6 +34,7 @@ import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Api(value = "复核数据--核证", tags = {"复核数据--核证"})
 @RestController
@@ -313,9 +314,19 @@ public class CheckDataController {
                 PageData<DataCheckYx> tmp = checkYxService.GetGroupCheckDataList(datasource, dstr, i,  count);
                 List<DataCheckYx> ready = tmp.getData();
 
+                // 获取ready第一条数据的时间
+                String firstTime = ready.get(0).getGroupDate();
+                String year = firstTime.substring(0, 4);
                 try {
-                    PamTransfer transfer = p2s.get(0);
-                    PamProject project = p3s.get(0);
+                    // 获取p2s中stime<=firstTime，并且etime>firstTime的数据
+                    List<PamTransfer> p2s1 = p2s.stream().filter(p -> p.getStime().compareTo(firstTime) <= 0 && p.getEtime().compareTo(firstTime) > 0).collect(Collectors.toList());
+                    // 获取p3s中stime<=firstTime，并且etime>firstTime的数据
+                    List<PamProject> p3s1 = p3s.stream().filter(p -> p.getStime().compareTo(firstTime) <= 0 && p.getEtime().compareTo(firstTime) > 0).collect(Collectors.toList());
+
+//                    PamTransfer transfer = p2s.get(0);
+//                    PamProject project = p3s.get(0);
+                    PamTransfer transfer = p2s1.get(0);
+                    PamProject project = p3s1.get(0);
                     for (DataCheckYx yx : ready) {
                         Date stime = yx.getStime();
                         String tripType = yx.getTripType();
@@ -333,7 +344,7 @@ public class CheckDataController {
 
                         Double cSend = yx.getCSend();
                         String stimeStr = DateUtil.format(stime, "M/d");
-                        stimeStr = "2021/" + stimeStr;
+                        stimeStr = year + "/" + stimeStr;
                         PamCpf cpf = this.GetOneByTime(stimeStr, p1s);
                         if (cpf == null) {
                             isOK = false;

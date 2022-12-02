@@ -23,4 +23,10 @@ public class PamProject {
 
     @TableField("dt")
     private Float dt;
+
+    @TableField("stime")
+    private String stime;
+
+    @TableField("etime")
+    private String etime;
 }
