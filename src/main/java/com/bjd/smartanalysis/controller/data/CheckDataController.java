@@ -377,11 +377,11 @@ public class CheckDataController {
                                 Double jpVal = GetObjectByFieldName(pamJP, fieldName);
                                 Double calcLeftValue = jpVal * checkLength;
 
-                                System.out.println("val====" + val + ",tripType:::" + tripType + ",tripTypeVal:::" +
+                                /*System.out.println("val====" + val + ",tripType:::" + tripType + ",tripTypeVal:::" +
                                         GetValTransfer(tripType, transfer) + ",checkLength:::" + checkLength +
                                         ",projectVal:::" + GetValProject(tripType, project) +
                                         ",fieldName:::" + stimeStr + " " +fieldName +
-                                        ",calcRightVal:::" + calcRightVal + ",jpVal:::" + jpVal + ",calcLeftValue:::" + calcLeftValue);
+                                        ",calcRightVal:::" + calcRightVal + ",jpVal:::" + jpVal + ",calcLeftValue:::" + calcLeftValue);*/
 
                                 // 判断数据是否有问题？
                                 if (Math.abs((calcRightVal - cSend)/calcRightVal )> 0.01) {
